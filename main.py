@@ -77,11 +77,18 @@ def run_all_statuses_at_time(hash_table, trucks):
 
     for current_package in all_packages:
         package_id_str = str(current_package.package_id).zfill(2)
-
         if current_package.package_id == 9 and query_time < datetime.time(10, 20):
             address_str = "300 State St".ljust(25)[:25]
         else:
-            address_str = str(current_package.address)
+            address_str = str(current_package.address).ljust(25)[:25]
+
+
+
+        truck_number = "N/A"
+        for truck in trucks:
+            if current_package in truck.packages:
+                truck_number = str(truck.truck_id)
+                break
 
         if current_package.delivery_time is not None and current_package.delivery_time <= query_time:
             status_at_query_time = "delivered at " + str(current_package.delivery_time)
@@ -93,7 +100,7 @@ def run_all_statuses_at_time(hash_table, trucks):
                         status_at_query_time = "en route             "
                     break
 
-        print("ID: " + package_id_str + "  |  Status: " + status_at_query_time + "  |  Address: " + address_str)
+        print("ID: " + package_id_str + "  |  Address: " + address_str + "  |  Status: " + status_at_query_time + "  |  Deadline: " + str(current_package.deadline).ljust(8) + "  |  Truck: " + truck_number)
 
 #Calculates total mileage for all trucks at EOD
 def run_total_mileage(total_mileage):
